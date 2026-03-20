@@ -35,6 +35,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/items', itemsRoutes);
 app.use('/api/bids', bidsRoutes);
 
+// Root route (for Render health checks)
+app.get('/', (req, res) => {
+  res.json({ name: 'Green Gambit API', status: 'running' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
