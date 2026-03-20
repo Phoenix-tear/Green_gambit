@@ -1,0 +1,112 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { apiFetch } from '@/lib/api';
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await apiFetch('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ name, email, password }),
+      });
+      router.push('/login');
+    } catch (err) {
+      setError(err.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      {/* Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-20 w-60 h-60 bg-emerald-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-60 h-60 bg-amber-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative w-full max-w-md">
+        <div className="bg-[#0d2818]/90 border border-[#1a4731]/60 rounded-2xl p-8 backdrop-blur-sm shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
+              <span className="text-white font-black text-xl">+</span>
+            </div>
+            <h1 className="text-2xl font-bold text-white">Create Account</h1>
+            <p className="text-gray-400 text-sm mt-1">Join the bidding arena</p>
+          </div>
+
+          {error && (
+            <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">Full Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full bg-[#1a4731]/40 border border-[#1a4731] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                placeholder="John Doe"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-[#1a4731]/40 border border-[#1a4731] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full bg-[#1a4731]/40 border border-[#1a4731] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 rounded-xl font-bold text-base hover:from-emerald-400 hover:to-emerald-500 transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <p className="text-gray-500 text-sm text-center mt-6">
+            Already have an account?{' '}
+            <Link href="/login" className="text-amber-400 hover:text-amber-300 font-medium">
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

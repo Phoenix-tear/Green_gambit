@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --green-deep: #091f13;
+  --green-dark: #0d2818;
+  --green-mid: #1a4731;
+  --gold: #d97706;
+  --gold-light: #f59e0b;
+}
+
+/* Custom scrollbar for bid history */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #1a4731;
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #2d6a4f;
+}
+
+/* Smooth transitions for real-time updates */
+* {
+  transition-property: background-color, border-color, color, opacity;
+  transition-timing-function: ease-in-out;
+  transition-duration: 150ms;
+}
+
+/* Input number arrows removal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
